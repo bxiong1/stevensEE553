@@ -1,0 +1,294 @@
+CODE：
+%Step1
+x1 = [-3.6,-3.8,2.2];
+x2 = [3.4,5.2,-1.8];
+x3 = [1.4,0.2,-2.8];
+x4 = [-0.6,-2.8,4.2];
+x5 = [-0.6,1.2,-1.8];
+
+total = x1'*x1+x2'*x2+x3'*x3+x4'*x4+x5'*x5 %generate S1 matrix
+
+y1 = [1.6,-1.8,0.4];
+y2 = [1.6,3.2,-1.6];
+y3 = [-4.4,-1.8,3.4];
+y4 = [-3.4,4.2,-0.6];
+y5 = [4.6,-3.8,-1.6];
+
+total1 = y1'*y1+y2'*y2+y3'*y3+y4'*y4+y5'*y5  %generate S2 matrix
+
+sum = total+total1 %generate Sw matrix
+sum_inv = inv(sum) %inverse the Sw matrix
+mean1 = [(1+8+6+4+4)/5,(1+10+5+2+6)/5,(6+2+1+8+2)/5]'
+mean2 = [(0+0-6-5+3)/5,(0+5+0+6-2)/5,(2+0+5+1+0)/5]'
+mean_diff = mean1-mean2
+
+w = sum_inv*mean_diff
+%original D data
+D1 = [1,1,6]';
+D2 = [8,10,2]';
+D3 = [6,5,1]';
+D4 = [4,2,8]';
+D5 = [4,6,2]';
+D6 = [0,0,2]';
+D7 = [0,5,0]';
+D8 = [-6,0,5]';
+D9 = [-5,6,1]';
+D10 = [3,-2,0]';
+
+%compute yk to obtain new data
+y_k1 = w'*D1
+y_k2 = w'*D2
+y_k3 = w'*D3
+y_k4 = w'*D4
+y_k5 = w'*D5
+y_k6 = w'*D6
+y_k7 = w'*D7
+y_k8 = w'*D8
+y_k9 = w'*D9
+y_k10 = w'*D10
+
+%Step3
+y_k1_new = y_k1-2
+y_k2_new = y_k2-2
+y_k3_new = y_k3-2
+y_k4_new = y_k4-2
+y_k5_new = y_k5-2
+theta1 = (y_k1_new+y_k2_new+y_k3_new+y_k4_new+y_k5_new)*(1/5)
+mu_hat = (y_k6+y_k7+y_k8+y_k9+y_k10)*(1/5)
+y_k6_new = (y_k6-mu_hat)^2
+y_k7_new = (y_k7-mu_hat)^2
+y_k8_new = (y_k8-mu_hat)^2
+y_k9_new = (y_k9-mu_hat)^2
+y_k10_new = (y_k10-mu_hat)^2
+sig_hat = sqrt((1/5)*(y_k6_new+y_k7_new+y_k8_new+y_k9_new+y_k10_new))
+
+
+%Step5
+
+x_test = [1,2,3]';
+y_test = w'*x_test
+class_1 = 1/(2*0.6217)*exp(-abs(1.3191-2)/0.6217) %likelihood for p(x|w1)
+class_2 = 1/(sqrt(2*pi)*0.2147)*exp(-0.5*((1.3191-0.3701)/0.2147)^2) %likelihood for p(x|w2)
+p_x = class_1*0.5+class_2*0.5 % compute evidence p(x)
+class_1_post=class_1*0.5/p_x %posterior for p(w1|x)
+class_2_post = class_2*0.5/p_x %posterior for p(w2|x)
+R_1 = 2*class_2_post %compute R(a1|x)
+R_2 = 3*class_1_post %compute R(a2|x)
+
+
+
+OUTPUT:
+
+>> EE646MIDTERM
+
+total =
+
+   27.2000   32.6000  -19.4000
+   32.6000   50.8000  -32.2000
+  -19.4000  -32.2000   36.8000
+
+
+total1 =
+
+   57.2000  -21.6000  -22.2000
+  -21.6000   48.8000   -8.4000
+  -22.2000   -8.4000   17.2000
+
+
+sum =
+
+   84.4000   11.0000  -41.6000
+   11.0000   99.6000  -40.6000
+  -41.6000  -40.6000   54.0000
+
+
+sum_inv =
+
+    0.0216    0.0063    0.0214
+    0.0063    0.0163    0.0172
+    0.0214    0.0172    0.0479
+
+
+mean1 =
+
+    4.6000
+    4.8000
+    3.8000
+
+
+mean2 =
+
+   -1.6000
+    1.8000
+    1.6000
+
+
+mean_diff =
+
+    6.2000
+    3.0000
+    2.2000
+
+
+w =
+
+    0.1996
+    0.1260
+    0.2892
+
+
+y_k1 =
+
+    2.0608
+
+
+y_k2 =
+
+    3.4348
+
+
+y_k3 =
+
+    2.1166
+
+
+y_k4 =
+
+    3.3640
+
+
+y_k5 =
+
+    2.1326
+
+
+y_k6 =
+
+    0.5784
+
+
+y_k7 =
+
+    0.6298
+
+
+y_k8 =
+
+    0.2485
+
+
+y_k9 =
+
+    0.0471
+
+
+y_k10 =
+
+    0.3468
+
+
+y_k1_new =
+
+    0.0608
+
+
+y_k2_new =
+
+    1.4348
+
+
+y_k3_new =
+
+    0.1166
+
+
+y_k4_new =
+
+    1.3640
+
+
+y_k5_new =
+
+    0.1326
+
+
+theta1 =
+
+    0.6217
+
+
+mu_hat =
+
+    0.3701
+
+
+y_k6_new =
+
+    0.0434
+
+
+y_k7_new =
+
+    0.0674
+
+
+y_k8_new =
+
+    0.0148
+
+
+y_k9_new =
+
+    0.1044
+
+
+y_k10_new =
+
+   5.4261e-04
+
+
+sig_hat =
+
+    0.2147
+
+
+y_test =
+
+    1.3191
+
+
+class_1 =
+
+    0.2690
+
+
+class_2 =
+
+   1.0631e-04
+
+
+p_x =
+
+    0.1345
+
+
+class_1_post =
+
+    0.9996
+
+
+class_2_post =
+
+   3.9506e-04
+
+
+R_1 =
+
+   7.9011e-04
+
+
+R_2 =
+
+    2.9988
+
+>> 
